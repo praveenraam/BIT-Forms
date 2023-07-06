@@ -1,38 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Coming Soon</title>
-    <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/bd-coming-soon.css">
+    <title>👷 Under construction</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100" rel="stylesheet">
+
+    <style>
+        body {
+  margin: 0;
+  background: #555;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 100;
+  background: none;
+  color: #fff;
+}
+
+#backgroundImage1,
+#backgroundImage2,
+.ovarlay,
+.infoText {
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+}
+
+backgroundImage,
+#backgroundImage1,
+#backgroundImage2 {
+  background-color: #555;
+  background-image: url(background.jpeg);
+  background-position: center center;
+  background-size: cover;
+}
+
+.ovarlay {
+  background: rgba(0, 0, 0, .6);
+  z-index: 5;
+}
+
+.infoText {
+  font-size: 80px;
+  text-align: center;
+  top: 40%;
+  background: none;
+  letter-spacing: 10px;
+  z-index: 6;
+  padding: 10px;
+}
+
+.infoText span {
+  font-size: 14px;
+  letter-spacing: 40px;
+  display: block;
+}
+
+.hide {
+  opacity: 0;
+  -webkit-transition: all 3s 3s ease-in-out;
+  -moz-transition: all 3s 3s ease-in-out;
+  -ms-transition: all 3s 3s ease-in-out;
+  -o-transition: all 3s 3s ease-in-out;
+  transition: all 3s 3s ease-in-out;
+  z-index: 2;
+}
+
+.show {
+  opacity: 1;
+  -webkit-transition: all 3s 3s ease-in-out;
+  -moz-transition: all 3s 3s ease-in-out;
+  -ms-transition: all 3s 3s ease-in-out;
+  -o-transition: all 3s 3s ease-in-out;
+  transition: all 3s 3s ease-in-out;
+  z-index: 3;
+}
+
+@keyframes slidein {
+  from {}
+  to {}
+}
+
+@media screen and (max-width: 768px) {
+  .infoText {
+    font-size: 40px;
+    letter-spacing: 5px;
+  }
+  .infoText span {
+    letter-spacing: 20px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .infoText {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .infoText span {
+    font-size: 10px;
+    letter-spacing: 10px;
+  }
+}
+    </style>
+
 </head>
-
-<body class="min-vh-100 d-flex flex-column">
-
-    <header>
-        <div class="container">
-            <nav class="navbar navbar-dark bg-transparenet">
-                <a class="navbar-brand" href="../index.html">
-                    <h1>BIT-Forms</h1>
-                </a>
-            </nav>
-        </div>
-    </header>
-    <main class="my-auto">
-        <div class="container">
-            <h1 class="page-title">We're coming soon</h1>
-            <p style="padding:0 0 0 15px;" class="page-description">Welcome to our webpage, currently under development! We're working hard to create an engaging and informative website that will provide valuable resources.</p>
-            <p style="margin:0 0 3px 0;">Stay connected</p>
-            <nav class="footer-social-links">
-                <a href="mailto:r4983010@gmail.com" class=""><i class="fa fa-envelope" style="font-size:24px; color:white;"></i></a>
-            </nav>
-        </div>
-    </main>
+<body>
+    <div id="backgroundImage"></div>
+  <div class="hide" id="backgroundImage1"></div>
+  <div class="show" id="backgroundImage2"></div>
+  <div class="ovarlay"></div>
+  <div class="infoText">
+    UNDER CONSTRUCTION
+    <span>VRINVROG</span>
+  </div>
 </body>
-
 </html>
