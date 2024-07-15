@@ -1,13 +1,12 @@
-body {
-	margin:  0;
-	overflow-y: scroll;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+html, body {
+	margin: 0;
+	padding: 0;
 }
 .page-content {
 	width: 100%;
-	height: 100vh;
 	margin:  0 auto;
 	background: #75e2e9;
-	display: flex;
 	display: -webkit-flex;
 	justify-content: center;
 	-o-justify-content: center;
@@ -19,11 +18,11 @@ body {
 	-ms-align-items: center;
 	-moz-align-items: center;
 	-webkit-align-items: center;
-	background: radial-gradient(circle at -8.9% 51.2%, rgb(255, 124, 0) 0%, rgb(255, 124, 0) 15.9%, rgb(255, 163, 77) 15.9%, rgb(255, 163, 77) 24.4%, rgb(19, 30, 37) 24.5%, rgb(19, 30, 37) 66%);
+	background: radial-gradient(circle at -8.9% 51.2%, #11009E 0%, #11009E 15.9%, #4942E4 15.9%, #4942E4 24.4%, #8696FE 24.5%, #8696FE 66%, #C4B0FF);
 }
 .form-v10-content  {
 	background: #fff;
-	width: 1100px;
+	width: 1100px; 
 	border-radius: 10px;
 	-o-border-radius: 10px;
 	-ms-border-radius: 10px;
@@ -60,7 +59,7 @@ body {
 }
 .form-v10-content .form-detail .form-right {
 	width: 100%;
-	background: #27374D;
+	background: #4942E4;
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 }
@@ -182,7 +181,7 @@ body {
 	border-bottom: 1px solid #ccc;
 }
 .form-v10-content .form-detail .form-right select option {
-	background: #4835d4;
+	background: hsl(215, 33%, 33%);
 }
 .form-v10-content .form-detail .form-checkbox {
 	margin-top: 37px;
@@ -250,7 +249,7 @@ body {
 	-webkit-box-shadow: 0px 6px 17px 0px rgba(0, 0, 0, 0.15);
 	width: 180px;
 	border: none;
-	margin: 6px 0 50px 0px;
+	margin: 6px 0 20px 0px;
 	cursor: pointer;
 	color: #333;
 	font-weight: 700;
@@ -298,15 +297,28 @@ body {
 	visibility: hidden;
 }
 .header{
-	color: #9DB2BF;
+	color: #f2f2f2;
+}
+.dy-display{
+	display: inline ;
 }
 
-
 /* Responsive */
-@media screen and (max-width: 1199px) {
+@media screen and (min-width: 1199px) {
+	.page-content {
+		height: 100vh;
+	}
+	#print {
+		display: inline;
+	}
 	
+}
+@media screen and (max-width: 1199px) {
 	.form-v10-content {
 		margin:  95px 20px;
+	}
+	#print {
+		display: none;
 	}
 }
 @media screen and (max-width: 991px) and (min-width: 768px) {
@@ -333,10 +345,7 @@ body {
 	}
 
 }
-@media screen and (max-width: 789px) {
-	*{
-		overflow-y: scroll;
-	}
+@media screen and (max-width: 767px) {
 	.form-v10-content .form-detail {
 		flex-direction:  column;
 		-o-flex-direction:  column;
@@ -351,16 +360,8 @@ body {
 	.form-v10-content .form-detail .form-left {
 		padding-bottom: 50px;
 	}
-
-	.page-content {
-		background-size: cover;
-		background-repeat: repeat;
-	}
 }
 @media screen and (max-width: 575px) {
-	*{
-		overflow-y: scroll;
-	}
 	.form-v10-content .form-detail .form-group {
 		flex-direction:  column;
 		-o-flex-direction:  column;
@@ -395,10 +396,61 @@ body {
 	.form-v10-content .form-detail .form-right .form-row-last {
 		padding-left: 0;
 		text-align: center;
-	    margin: 44px 0 30px;
+	    margin: 30px 0 30px;
 	}
-	.page-content {
-		background-size: cover;
-		background-repeat: repeat;
+	.dy-display{
+		display: block ;
 	}
+	
+}
+.radio {
+	margin: 0.5rem;
+}
+.radio input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+}
+.radio input[type="radio"] + .radio-label:before {
+	content: '';
+	background: #f4f4f4;
+	border-radius: 100%;
+	border: 1px solid #b4b4b4;
+	display: inline-block;
+	width: 1.4em;
+	height: 1.4em;
+	position: relative;
+	top: -0.2em;
+	margin-right: 0.5em;
+	vertical-align: top;
+	cursor: pointer;
+	text-align: center;
+	transition: all 250ms ease;
+}
+.radio input[type="radio"]:checked + .radio-label:before {
+	background-color:#4942E4;
+	box-shadow: inset 0 0 0 4px #f4f4f4;
+}
+.radio input[type="radio"]:focus + .radio-label:before {
+	outline: none;
+	border-color:#4942E4;
+}
+.radio input[type="radio"]:disabled + .radio-label:before {
+	box-shadow: inset 0 0 0 4px #f4f4f4;
+	border-color: #b4b4b4;
+	background: #b4b4b4;
+}
+.radio input[type="radio"] + .radio-label:empty:before {
+	margin-right: 0;
+}
+.radio-margin{
+	margin-left: 0%;
+}
+.title-con{ 
+    font-family: 'Poppins',sans-serif;
+    display: flex;
+    align-items: center; 
+    color:white; font-size: 2.4rem; font-family:Poppins; font-weight: 500;
+}
+.title{
+margin : 2% 0 0 0 ;
 }

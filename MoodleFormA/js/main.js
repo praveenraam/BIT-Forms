@@ -1,4 +1,13 @@
-async function GeneratePdf() {
+var mode;
+var courses = [];
+var departmentData = '';
+var yearData = '';
+var semesterData = ''; 
+var selectElement = '';
+var no_of_subjects = 6;
+
+
+async function GeneratePdf( statement ) {
     // Load the PDF document you want to modify
     const dateValue = $('#m_inputdate').val();
     const parts = dateValue.split("-");
@@ -9,10 +18,10 @@ async function GeneratePdf() {
     const date = datem + "        " + year_;
     const name = $('#m_username').val().trim().toUpperCase();
     const rollno = $('#m_rollno').val().trim();
-    const department = $('#m_department').val().trim();
+    const department = $('#m_department').val();
     const mail = $('#m_mail').val().trim();
     const reason = $('#reason').val().trim();
-    const year = $('#m_year').val().trim();
+    const year = $('#m_year').val();
     const no_of_subjects = $('#m_no_subjects').val();
     
     if (date === '' || name === '' || rollno === '' || department === '' || mail === '' || reason === '' || year === '') {
@@ -20,14 +29,23 @@ async function GeneratePdf() {
       return 0;
     }
     
-    var sno = ['', '', '', '', '', ''];
-    var subject_code = ['', '', '', '', '', ''];
-    var subject_name = ['', '', '', '', '', ''];
+      var sno = ['', '', '', '', '', ''];
+      var subject_code = ['', '', '', '', '', ''];
+      var subject_name = ['', '', '', '', '', ''];
+    if (mode)  
     for (let val = 1; val <= no_of_subjects; val++) {
+        var code_name =  $(`#code_name_${val}`).val();
+        [subject_code[val-1],subject_name[val-1]] = code_name.split(" - ");
+        sno[val-1] = `${val}`;
+    }
+    else
+      for (let val = 1; val <= no_of_subjects; val++) {
         subject_code[val-1] = $(`#sc${val}`).val();
         subject_name[val-1] = $(`#sname${val}`).val();
         sno[val-1] = `${val}`;
     }
+  
+    
     
     const existingPdfUrl = '../forms/MoodleFormA.pdf';
     const existingPdfBytes = await fetch(existingPdfUrl).then(res => res.arrayBuffer());
@@ -76,13 +94,32 @@ async function GeneratePdf() {
     const modifiedPdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(modifiedPdfBlob);
+
+    if (statement == 'download'){
     downloadLink.download = `FA Subject Unlock Form - ${rollno}.pdf`;
     downloadLink.click();
     return 1;
+  }
+  
+  if (statement == 'print'){
+    const printWindow = window.open('', '_blank');
+    const printDocument = printWindow.document;
+    
+    // Embed the PDF in an <embed> element for printing
+    const embedElement = printDocument.createElement('embed');
+    embedElement.src = downloadLink.href;
+    embedElement.type = 'application/pdf';
+    embedElement.style.width = '100%';
+    embedElement.style.height = '100vh';
+    
+    printDocument.body.appendChild(embedElement);
+    return 1;
+  }
 }
 
+
   $(document).ready(function() {
-    const departmentSelect = document.getElementById('m_department');
+  const departmentSelect = document.getElementById('m_department');
 	const yearSelect = document.getElementById('m_year');
 	const semesterSelect = document.getElementById('m_semester');
 	const noSubjectsSelect = document.getElementById('m_no_subjects');
@@ -90,23 +127,81 @@ async function GeneratePdf() {
 	yearSelect.disabled = true;
 	semesterSelect.disabled = true;
 	noSubjectsSelect.disabled = true;
-
 	// Add an event listener to the department select element
 	departmentSelect.addEventListener('change', () => {
-	// Enable the year select element if a department is selected
-	yearSelect.disabled = departmentSelect.value === '';
+    getCourseGenerateDetail();
+    courses =     getCourses(departmentData, yearData, semesterData);
+    console.log(courses.length);
+    console.log(no_of_subjects);
+    mode = courses.length > 0 ? appendDropDown(no_of_subjects, courses) : appendManualEntry(no_of_subjects) ;
+    yearSelect.disabled = departmentSelect.value === '';
 	yearSelect.addEventListener('change', () => {
-		// Enable the semester and noSubjects select elements if a year is selected
-		semesterSelect.disabled = yearSelect.value === '';
+    getCourseGenerateDetail();
+    courses =     getCourses(departmentData, yearData, semesterData);
+     mode = courses.length > 0 ? appendDropDown(no_of_subjects, courses) : appendManualEntry(no_of_subjects) ;
+    semesterSelect.disabled = yearSelect.value === '';
 		semesterSelect.addEventListener('change', () => {
-		// Enable the semester and noSubjects select elements if a year is selected
-		noSubjectsSelect.disabled = yearSelect.value === '';
+      getCourseGenerateDetail();
+      courses =     getCourses(departmentData, yearData, semesterData);
+      mode = courses.length > 0 ? appendDropDown(no_of_subjects, courses) : appendManualEntry(no_of_subjects);
+      noSubjectsSelect.disabled = yearSelect.value === '';
 		noSubjectsSelect.addEventListener('change', () => {
-			// Get a reference to the select element
-		var selectElement = $('#m_no_subjects').val();
-		console.log(selectElement);
-		$('#subjects').empty();
-			for (let num = 1; num <= selectElement; num++) {
+      getCourseGenerateDetail();
+      courses =     getCourses(departmentData, yearData, semesterData);
+      console.log(no_of_subjects);
+      mode = courses.length > 0 ? appendDropDown(no_of_subjects, courses) : appendManualEntry(no_of_subjects);
+    });
+      });
+    });
+  });
+
+});
+function getCourses(department, year, semester) {
+  try {
+    const departmentData = curriculum.Departments[department][year][semester];
+    console.log(departmentData);
+    const courses = departmentData.map(course => [`${course.code} - ${course.course}`]);
+    return courses;
+  } catch (TypeError) {
+    courses = [];
+    return courses;
+  }
+ 
+}
+function getCourseGenerateDetail(){
+    no_of_subjects = $('#m_no_subjects').val();
+    departmentData = $('#m_department').val();
+    yearData = $('#m_year').val();
+    semesterData = $('#m_semester').val(); 
+}
+function appendDropDown(no_of_subjects,courses) {
+  		$('#subjects').empty();
+  			for (let num = 1; num <= no_of_subjects; num++) {
+          var id_char = '#code_name_'+num.toString();
+  				$('#subjects').append(`
+  				<label class="form-row header" for="s_code">Subject ${num}</label>
+  						<div class="form-row">
+  							<select id="code_name_${num}" name="title">
+                <option disabled selected class="option">Select Subject</option>`);
+            for (let no = 0; no < courses.length; no++) {
+              $(id_char).append(`
+              <option class="option">${courses[no]}</option>
+              `);
+            }
+  							$('#subjects').append(`</select>
+  							<span class="select-btn">
+  								  <i class="zmdi zmdi-chevron-down"></i>
+  							</span>
+  						</div>
+  						
+  				`);
+  			}
+      return 1;
+}
+function appendManualEntry(no_of_subjects){
+  console.log(no_of_subjects);
+  $('#subjects').empty();
+			for (let num = 1; num <= no_of_subjects; num++) {
 				$('#subjects').append(`
 				<label class="form-row header" for="s_code">Subject ${num}</label>
 						<div class="form-group">
@@ -119,26 +214,6 @@ async function GeneratePdf() {
 						</div>
 						
 				`);
-			}
-
-		});
-		});
-	});
-	});
-
-  });
-async function MailPdf(){
-        var value = await GeneratePdf()
-        if  (value === 1){
-            setTimeout(mail(), 3000);
-        }	
-}
-function mail(){
-       	// Construct the email link with the recipient email, subject, and body
-		const recipientEmail = 'Choose_Reciptent';
-		const subject = 'Moodle Unblock Form';
-		const body = 'Attach The Unblock Form From Downloads.';
-		var emailLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
-		// Redirect the user to the email link
-		window.location.href = emailLink;
+    }
+return 0;
 }
